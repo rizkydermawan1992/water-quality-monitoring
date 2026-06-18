@@ -1,0 +1,7 @@
+{
+  "files.autoSave": "afterDelay",
+  "editor.defaultFormatter": "vscode.html-language-features",
+  "prettier.bracketSameLine": true,
+  "prettier.enable": true,
+  "prettier.useTabs": true
+}
