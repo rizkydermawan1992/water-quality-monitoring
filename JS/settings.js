@@ -1,8 +1,5 @@
-
-const API_SETTINGS = "https://n8n-35yaee339qxb.jkt6.sumopod.my.id/webhook/fb52459f-ea21-4674-bcf1-2f2f0a3e5afb";
-
-
-const API_UPDATE = "https://n8n-35yaee339qxb.jkt6.sumopod.my.id/webhook/5a121907-ee95-4993-9597-592ff665e026";
+const API_LOAD_CONFIG = "https://n8n-35yaee339qxb.jkt6.sumopod.my.id/webhook/fb52459f-ea21-4674-bcf1-2f2f0a3e5afb";
+const API_UPDATE_CONFIG = "https://n8n-35yaee339qxb.jkt6.sumopod.my.id/webhook/5a121907-ee95-4993-9597-592ff665e026";
 
 const userName = sessionStorage.getItem("username"); // ambil username di session
 
@@ -11,7 +8,7 @@ const userName = sessionStorage.getItem("username"); // ambil username di sessio
 // ==========================
 async function loadSettings() {
   try {
-    const res = await fetch(API_SETTINGS, {
+    const res = await fetch(API_LOAD_CONFIG, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -127,7 +124,7 @@ async function saveThreshold() {
 // ==========================
 async function sendUpdate(payload) {
   try {
-    const res = await fetch(API_UPDATE, {
+    const res = await fetch(API_UPDATE_CONFIG, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
