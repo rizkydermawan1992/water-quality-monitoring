@@ -71,14 +71,11 @@ async function loadMQTTConfig(){
 
     MQTT_BROKER = config.broker;
     MQTT_PORT = config.port;
-
     MQTT_SENSOR_TOPIC = config.sensor_topic;
     MQTT_STATUS_TOPIC = config.status_topic;
 
 
     console.log("MQTT CONFIG:", config);
-
-
     connectMQTT();
 
 

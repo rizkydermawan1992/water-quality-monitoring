@@ -23,10 +23,20 @@ async function loadSettings() {
     if (!data || typeof data !== "object") return;
 
     // MQTT
+    const sensorTopic =
+      data.mqtt_topic_sensor.substring(
+        data.mqtt_topic_sensor.lastIndexOf("/") + 1
+      );
+
+    const statusTopic =
+      data.mqtt_topic_status.substring(
+        data.mqtt_topic_status.lastIndexOf("/") + 1
+      );
+
     mqttBroker.value = data.mqtt_broker ?? "";
     mqttPort.value = data.mqtt_port ?? "";
-    mqttTopicSensor.value = data.mqtt_topic_sensor ?? "";
-    mqttTopicStatus.value = data.mqtt_topic_status ?? "";
+    mqttTopicSensor.value = sensorTopic ?? "";
+    mqttTopicStatus.value = statusTopic ?? "";
 
     // Telegram
     chatId.value = data.telegram_chat_id ?? "";
@@ -47,12 +57,15 @@ async function loadSettings() {
 // SAVE MQTT
 // ==========================
 async function saveMQTT() {
+  let sensor_topic = "rizkyproject/wqm_sensor/" + mqttTopicSensor.value;
+  let status_topic = "rizkyproject/wqm_status/" + mqttTopicStatus.value;
+
   await sendUpdate({
     action: "save_mqtt",
     mqtt_broker: mqttBroker.value,
     mqtt_port: mqttPort.value,
-    mqtt_topic_sensor: mqttTopicSensor.value,
-    mqtt_topic_status: mqttTopicStatus.value,
+    mqtt_topic_sensor: sensor_topic,
+    mqtt_topic_status: status_topic,
   });
 }
 
@@ -135,7 +148,7 @@ async function sendUpdate(payload) {
       }),
     });
 
-    
+
     const result = await res.json();
     alert(result.message);
   } catch (err) {
