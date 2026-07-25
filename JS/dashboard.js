@@ -114,50 +114,77 @@ function setBadge(element, text, style) {
 // WATER STATUS
 // ==========================================
 
-function updateWaterCondition(ph, dissolvedOxygen, temperature) {
-  // =========================
-  // pH
-  // =========================
+// Global variables
+let phMin, phMax;
+let doMin, doMax;
+let tempMin, tempMax;
 
+const API_THRESHOLD = "https://n8n-35yaee339qxb.jkt6.sumopod.my.id/webhook/94a1b592-766a-401a-8332-3ead14815dc1";
+
+async function loadThreshold() {
+  try {
+    const res = await fetch(API_THRESHOLD, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+    if (!data || typeof data !== "object") return;
+
+    console.log(data);
+
+    phMin = Number(data.ph_min);
+    phMax = Number(data.ph_max);
+
+    doMin = Number(data.do_min);
+    doMax = Number(data.do_max);
+
+    tempMin = Number(data.temp_min);
+    tempMax = Number(data.temp_max);
+
+  } catch (err) {
+    console.error("Load Threshold error:", err);
+  }
+}
+
+function updateWaterCondition(ph, dissolvedOxygen, temperature) {
+
+  // PH
   if (isNaN(ph)) {
     setBadge(phStatus, "-", "bg-slate-800 text-slate-400");
-  } else if (ph < 6.5) {
+  } else if (ph < phMin) {
     setBadge(phStatus, "Rendah", "bg-red-500/20 text-red-400");
-  } else if (ph > 8.5) {
+  } else if (ph > phMax) {
     setBadge(phStatus, "Tinggi", "bg-orange-500/20 text-orange-400");
   } else {
     setBadge(phStatus, "Normal", "bg-emerald-500/20 text-emerald-400");
   }
 
-  // =========================
-  // DO
-  // =========================
 
+  // DO
   if (isNaN(dissolvedOxygen)) {
     setBadge(doStatus, "-", "bg-slate-800 text-slate-400");
-  } else if (dissolvedOxygen < 5) {
+  } else if (dissolvedOxygen < doMin) {
     setBadge(doStatus, "Rendah", "bg-red-500/20 text-red-400");
-  } else if (dissolvedOxygen > 8) {
+  } else if (dissolvedOxygen > doMax) {
     setBadge(doStatus, "Tinggi", "bg-blue-500/20 text-blue-400");
   } else {
     setBadge(doStatus, "Normal", "bg-emerald-500/20 text-emerald-400");
   }
 
-  // =========================
-  // TEMPERATURE
-  // =========================
-
+  // Temperature
   if (isNaN(temperature)) {
     setBadge(tempStatus, "-", "bg-slate-800 text-slate-400");
-  } else if (temperature < 27) {
+  } else if (temperature < tempMin) {
     setBadge(tempStatus, "Rendah", "bg-blue-500/20 text-blue-400");
-  } else if (temperature > 33) {
+  } else if (temperature > tempMax) {
     setBadge(tempStatus, "Tinggi", "bg-orange-500/20 text-orange-400");
   } else {
     setBadge(tempStatus, "Normal", "bg-emerald-500/20 text-emerald-400");
   }
 }
-
 // ==========================================
 // UPDATE DASHBOARD
 // ==========================================
@@ -210,5 +237,9 @@ function updateDashboard(data) {
 // ==========================================
 // INIT
 // ==========================================
+(async () => {
+  await loadThreshold();
+  console.log("Threshold selesai dimuat");
+})();
 updateEsp32Status("unknown");
 console.log("Water Quality Monitoring Dashboard Loaded");

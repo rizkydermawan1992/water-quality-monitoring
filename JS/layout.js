@@ -40,8 +40,8 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
 // MQTT CONFIG FROM API
 // ==========================================
 
-const MQTT_CONFIG_API = 
-"https://n8n-35yaee339qxb.jkt6.sumopod.my.id/webhook/bc9a8ab0-1276-42a7-b11b-6c9311ac30d3";
+const MQTT_CONFIG_API =
+  "https://n8n-35yaee339qxb.jkt6.sumopod.my.id/webhook/bc9a8ab0-1276-42a7-b11b-6c9311ac30d3";
 
 
 let MQTT_BROKER;
@@ -60,7 +60,7 @@ const mqttStatus = document.getElementById("mqttStatus");
 // LOAD MQTT CONFIG
 // ==========================================
 
-async function loadMQTTConfig(){
+async function loadMQTTConfig() {
 
   try {
 
@@ -79,7 +79,7 @@ async function loadMQTTConfig(){
     connectMQTT();
 
 
-  } catch(error){
+  } catch (error) {
 
     console.error(
       "Gagal mengambil MQTT Config:",
@@ -96,11 +96,11 @@ async function loadMQTTConfig(){
 // MQTT CONNECT
 // ==========================================
 
-function connectMQTT(){
+function connectMQTT() {
 
 
   const MQTT_URL =
-  `wss://${MQTT_BROKER}:${MQTT_PORT}/mqtt`;
+    `wss://${MQTT_BROKER}:${MQTT_PORT}/mqtt`;
 
 
   console.log(
@@ -113,7 +113,7 @@ function connectMQTT(){
 
 
 
-  client.on("connect",()=>{
+  client.on("connect", () => {
 
 
     console.log(
@@ -126,14 +126,14 @@ function connectMQTT(){
 
 
     mqttStatus.innerHTML =
-    `
+      `
     <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
     Connected
     `;
 
 
     mqttStatus.className =
-    "flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm";
+      "flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm";
 
 
 
@@ -149,11 +149,11 @@ function connectMQTT(){
 
 
 
-  client.on("reconnect",()=>{
+  client.on("reconnect", () => {
 
 
     mqttStatus.innerHTML =
-    `
+      `
     <span class="h-2 w-2 rounded-full bg-yellow-400"></span>
     Reconnecting
     `;
@@ -163,14 +163,14 @@ function connectMQTT(){
 
 
 
-  client.on("offline",()=>{
+  client.on("offline", () => {
 
 
-    mqttConnected=false;
+    mqttConnected = false;
 
 
     mqttStatus.innerHTML =
-    `
+      `
     <span class="h-2 w-2 rounded-full bg-red-400"></span>
     Disconnected
     `;
@@ -180,14 +180,14 @@ function connectMQTT(){
 
 
 
-  client.on("close",()=>{
+  client.on("close", () => {
 
 
-    mqttConnected=false;
+    mqttConnected = false;
 
 
     mqttStatus.innerHTML =
-    `
+      `
     <span class="h-2 w-2 rounded-full bg-red-400"></span>
     Disconnected
     `;
@@ -197,7 +197,7 @@ function connectMQTT(){
 
 
 
-  client.on("error",(error)=>{
+  client.on("error", (error) => {
 
 
     console.error(
@@ -224,11 +224,11 @@ function connectMQTT(){
 // HANDLE MQTT MESSAGE
 // ==========================================
 
-function handleMQTTMessage(topic,message){
+function handleMQTTMessage(topic, message) {
 
 
   const payload =
-  message.toString();
+    message.toString();
 
 
   console.log(
@@ -248,14 +248,14 @@ function handleMQTTMessage(topic,message){
   // ESP32 STATUS
   // ======================
 
-  if(topic === MQTT_STATUS_TOPIC){
+  if (topic === MQTT_STATUS_TOPIC) {
 
 
-    try{
+    try {
 
 
       const device_data =
-      JSON.parse(payload);
+        JSON.parse(payload);
 
 
       updateEsp32Status(
@@ -263,7 +263,7 @@ function handleMQTTMessage(topic,message){
       );
 
 
-    }catch(error){
+    } catch (error) {
 
       console.error(
         "Invalid Status Payload",
@@ -284,14 +284,14 @@ function handleMQTTMessage(topic,message){
   // ======================
 
 
-  if(topic === MQTT_SENSOR_TOPIC){
+  if (topic === MQTT_SENSOR_TOPIC) {
 
 
-    try{
+    try {
 
 
       const data =
-      JSON.parse(payload);
+        JSON.parse(payload);
 
 
 
@@ -300,7 +300,7 @@ function handleMQTTMessage(topic,message){
       );
 
 
-    }catch(error){
+    } catch (error) {
 
 
       console.error(
@@ -325,7 +325,7 @@ function handleMQTTMessage(topic,message){
 
 loadMQTTConfig();
 
- 
+
 // ESP32 STATUS
 const esp32Status = document.getElementById("esp32Status");
 function updateEsp32Status(status) {
